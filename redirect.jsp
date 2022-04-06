@@ -29,7 +29,8 @@
 			try{
 				result.next();
 				if(result.getString("Password").equals(password)){
-					out.print("Login Success! Redirecting...");
+					out.println("Login Success! ");
+					out.println( " <a href='index.jsp' >logout </a> " );
 				}else{
 					out.print("Wrong Password");
 				}
