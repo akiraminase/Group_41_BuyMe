@@ -25,4 +25,7 @@
 			<input type="submit" value="Login">
 		</form>
 	<br>
+	<body>
+out.println( " <a href='new account registration.html' >register here </a> " );
+</body>
 </html>
