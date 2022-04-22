@@ -30,6 +30,8 @@
 				result.next();
 				if(result.getString("Password").equals(password)){
 					out.print("Login Success! Redirecting...");
+					out.println( " <a href='index.jsp' >logout </a> " );
+					out.println( " <a href='sellerpage.jsp' >enter seller mode </a> " );
 				}else{
 					out.print("Wrong Password");
 				}
