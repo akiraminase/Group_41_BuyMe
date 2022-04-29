@@ -26,6 +26,6 @@
 		</form>
 	<br>
 	<body>
-out.println( " <a href='new account registration.html' >register here </a> " );
+<a href='new account registration.html' >register here </a>
 </body>
 </html>
