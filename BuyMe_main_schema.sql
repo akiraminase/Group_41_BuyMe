@@ -121,3 +121,19 @@ INSERT INTO end_user
 VALUES ("test_user_1", "test_user_1@gmail.com", "test_password_1");
 
 SELECT * FROM end_user WHERE Username = 'test_user_1';
+SELECT * FROM Auction ;  
+SELECT * FROM Item ; 
+ALTER TABLE Item 
+ADD  make VARCHAR(20)
+AFTER Item_ID ;
+ALTER TABLE Item 
+ADD  model VARCHAR(20)
+AFTER make ;
+ALTER TABLE Item 
+ADD  yearofcar VARCHAR(20)
+AFTER make ;
+ALTER TABLE Item
+DROP column Category_Level1 ;
+
+ALTER TABLE Item
+DROP column Category_Level2 ;
