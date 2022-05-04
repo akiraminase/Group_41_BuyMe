@@ -15,7 +15,7 @@ try {
 	String yearofcar = request.getParameter("yearofcar");
 	
 	 Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/buyme","root", "butter70");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/buyme","root", "password");
 Statement stmt = con.createStatement();
 
 String insert = "INSERT INTO Auction(Inital_Price, Minimum_Price, Closing_Time )"
