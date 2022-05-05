@@ -36,6 +36,7 @@ CREATE TABLE Auction (
 	Item_ID INT UNSIGNED NOT NULL, -- added
     Initial_Price DECIMAL(14 , 2 ),
     Minimum_Price DECIMAL(14 , 2 ),
+    Closing_Price DECIMAL(14 , 2 ),
     Start_Time DATETIME,
     Closing_Time DATETIME,
     PRIMARY KEY (Auction_ID),
