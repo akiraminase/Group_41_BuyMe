@@ -137,3 +137,7 @@ DROP column Category_Level1 ;
 
 ALTER TABLE Item
 DROP column Category_Level2 ;
+
+ALTER TABLE  Auction
+ADD  time_auction_ends time 
+AFTER  Closing_Time  ;
