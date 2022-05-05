@@ -13,7 +13,7 @@
 	
 	Please enter your username and password to login to the BuyMe site:
 	<br>
-		<form method="post" action="redirect.jsp">
+		<form method="post" action="main_page.jsp">
 			<table>
 				<tr>
 					<td>Username</td><td><input type="text" name="username" required></td>
