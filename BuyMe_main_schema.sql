@@ -14,6 +14,7 @@ CREATE TABLE Buyer (
     PRIMARY KEY (Username),
     FOREIGN KEY (username)
         REFERENCES End_user (username)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Seller (
@@ -21,6 +22,7 @@ CREATE TABLE Seller (
     PRIMARY KEY (Username),
     FOREIGN KEY (username)
         REFERENCES End_user (username)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE Item (
 	Item_ID INT UNSIGNED AUTO_INCREMENT,
@@ -50,7 +52,8 @@ CREATE TABLE Post (
     Description TEXT,
     PRIMARY KEY (Post_ID), 
     FOREIGN KEY (username)
-        REFERENCES Seller (username),
+        REFERENCES Seller (username)
+	ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (Auction_ID)
         REFERENCES Auction (Auction_ID )
 );
@@ -59,7 +62,8 @@ CREATE TABLE Search_History (
     Post_ID INT UNSIGNED,
     PRIMARY KEY (Username, Post_ID),
     FOREIGN KEY (username)
-        REFERENCES End_user (username),
+        REFERENCES End_user (username)
+	ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (Post_ID) 
         REFERENCES Post (Post_ID)
 );
@@ -72,7 +76,8 @@ CREATE TABLE Bid (
     Biding_Time DATETIME,
     PRIMARY KEY (Bid_ID),
     FOREIGN KEY (username)
-        REFERENCES Buyer (username),
+        REFERENCES Buyer (username)
+	ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (Auction_ID)
         REFERENCES Auction (Auction_ID)
 );
@@ -89,7 +94,8 @@ CREATE TABLE Alert (
 
     PRIMARY KEY (Alert_ID),
     FOREIGN KEY (username)
-        REFERENCES Buyer (username),
+        REFERENCES Buyer (username)
+	ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (Auction_ID)
         REFERENCES Auction (Auction_ID)
 );
@@ -124,6 +130,7 @@ CREATE TABLE Question (
     PRIMARY KEY (Question_ID),
     FOREIGN KEY (End_User)
         REFERENCES End_User (Username)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Answer(
@@ -133,7 +140,7 @@ CREATE TABLE Answer(
     Customer_Representative VARCHAR(20) NOT NULL,
     Description TEXT,
     PRIMARY KEY (Answer_ID),
-	FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID),
+	FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (Customer_Representative) REFERENCES Customer_Representative(Username)
 );
 
