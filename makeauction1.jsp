@@ -30,7 +30,7 @@ ps.setString(4, time_auction_ends) ;
 ps.executeUpdate();
 
 
- insert = "INSERT INTO Item(make, model, yearofcar, Item_Condition )"
+insert = "INSERT INTO Item(Category_LEVEL1, Category_LEVEL2, Category_LEVEL3, Item_Condition )"
 		+ "VALUES (?, ?, ?, ?)";
  ps = con.prepareStatement(insert);
  ps.setString(1, make) ;
