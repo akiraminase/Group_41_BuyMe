@@ -4,6 +4,7 @@
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 <%
 
+
 try {
 	  	
 	String Item_Condition = request.getParameter("Item_Condition");
@@ -13,6 +14,9 @@ try {
 	String make = request.getParameter("make");
 	String model = request.getParameter("model");
 	String yearofcar = request.getParameter("yearofcar");
+String description = request.getParameter("description") ;
+	
+	
 	
 	
 	String username = (String) request.getSession().getAttribute("username");
@@ -25,8 +29,8 @@ Statement stmt = con.createStatement();
 
 
 
-String insert = "INSERT INTO Auction(Initial_Price, Minimum_Price, Closing_Time )"
-		+ "VALUES (?, ?, ?)";
+String insert = "INSERT INTO Auction(Initial_Price, Minimum_Price, Closing_Time, Closing_price, Start_Time )"
+		+ "VALUES (?, ?, ?, Null, NOW())";
 PreparedStatement ps = con.prepareStatement(insert);
 
 ps.setFloat(1, Initial_Price);
@@ -36,7 +40,7 @@ ps.setString(3, Closing_Time) ;
 ps.executeUpdate();
 
 
- insert = "INSERT INTO Item(Category_Level1, Category_Level2, Category_Level3, Item_Condition )"
+ insert = "INSERT INTO Item(Make, Model, Year, Item_Condition )"
 		+ "VALUES (?, ?, ?, ?)";
  ps = con.prepareStatement(insert);
  ps.setString(1, make) ;
@@ -47,11 +51,11 @@ ps.executeUpdate();
  
  
  
- insert = "INSERT INTO Post( username)" 
-		 + "VALUES (?)";
+ insert = "INSERT INTO Post( username,  Description)" 
+		 + "VALUES (?, ?)";
  ps = con.prepareStatement(insert);
  ps.setString(1, username) ;
-
+ ps.setString(2, description) ;
  ps.executeUpdate();
 //insert = "INSERT INTO Item(Item_Condition)"
 	//	+ "VALUES (?)";
