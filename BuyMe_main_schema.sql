@@ -92,9 +92,9 @@ CREATE TABLE Alert (
     CHECK (Alert_Type IN ('New Item','Higher Bid')),
     Username VARCHAR(20),
     Auction_ID INT UNSIGNED, -- Auction id if a Auction alert
-	Category_Level1 VARCHAR(20), -- these if a new item  alert
-    Category_level2 VARCHAR(20),
-    Category_level3 VARCHAR(20),
+	Make VARCHAR(20), -- these if a new item  alert
+    Model VARCHAR(20),
+    Year VARCHAR(20),
     Creation_Time DATETIME,
 
     PRIMARY KEY (Alert_ID),
