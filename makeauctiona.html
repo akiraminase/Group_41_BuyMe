@@ -5,15 +5,17 @@
 <title>Item A auction creation </title>
 </head>
 <body>
-<form action= "makeauction1.jsp" method "post">
+<form action= "makeauction1.jsp" method ="post">
 Initial_Price:<input type="text" name= Initial_Price />
 Minimum_Price:<input type="text" name= Minimum_Price />
-Closing_Time:<input type="text" name= Closing_Time />
-Item_Condition:<input type="text" name= Item_Condition />
+Closing_Time:<input type="datetime-local" name= Closing_Time />
+Item_Condition:<select name=Item_Condition id=Item_Condition>
+    <option value="New">New</option>
+    <option value="Used">Used</option>
+    <option value="Refurbished">Refurbished</option></select>
 make:<input type="text" name= make />
 model:<input type="text" name= model />
 yearofcar<input type="text" name= yearofcar />
-time_auction_ends<input type="text" name= time_auction_ends />
 
 <input type="submit" />
 </body>

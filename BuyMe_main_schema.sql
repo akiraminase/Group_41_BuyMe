@@ -34,10 +34,6 @@ CREATE TABLE Item (
   PRIMARY KEY (Item_ID)
 );
 
-
-ALTER TABLE Item
-DROP column Category_Level2 ;
-
 CREATE TABLE Auction (
     Auction_ID INT UNSIGNED AUTO_INCREMENT,
 	Item_ID INT UNSIGNED NOT NULL, -- added
@@ -50,9 +46,6 @@ CREATE TABLE Auction (
     FOREIGN KEY (Item_ID)
         REFERENCES Item (Item_ID )
 );
-ALTER TABLE  Auction
-ADD  time_auction_ends time 
-AFTER  Closing_Time  ;
 
 CREATE TABLE Post (
 	Post_ID INT UNSIGNED AUTO_INCREMENT,
@@ -178,30 +171,30 @@ INSERT INTO item VALUES (NULL, "Toyota", "Corolla", "2017", "Used");
 INSERT INTO item VALUES (NULL, "Honda", "Fit", "2010", "Refurbished");
 INSERT INTO item VALUES (NULL, "Nissan", "Altima", "2022", "New");
 
-INSERT INTO Auction VALUES (NULL, 1, 15000, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-20 00:00:00', '%Y-%m-%d %T'));
+INSERT INTO Auction VALUES (NULL, 1, 15000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-20 00:00:00', '%Y-%m-%d %T'));
 INSERT INTO Post VALUES (NULL, 1, 'testuser3', 'selling car for upgrade. Located in New Brunswick, NJ');
 INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 15000, 20000, STR_TO_DATE('2022-05-05 19:00:00', '%Y-%m-%d %T'));
 INSERT INTO Bid VALUES (NULL, 1, 'testuser2', 16000, 21000, STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
 INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 17000, 20000, STR_TO_DATE('2022-05-06 21:00:00', '%Y-%m-%d %T'));
 
-INSERT INTO Auction VALUES (NULL, 2, 11000, NULL,  STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'));
+INSERT INTO Auction VALUES (NULL, 2, 11000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'));
 INSERT INTO Post VALUES (NULL, 2, 'testuser4', 'selling red fit dealer refurbished car.');
 INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 11000, 15000, STR_TO_DATE('2022-06-05 19:00:00', '%Y-%m-%d %T'));
 INSERT INTO Bid VALUES (NULL, 2, 'testuser2', 12000, 21000, STR_TO_DATE('2022-06-06 20:00:00', '%Y-%m-%d %T'));
 INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 17000, 21000, STR_TO_DATE('2022-06-06 21:00:00', '%Y-%m-%d %T'));
 
-INSERT INTO Auction VALUES (NULL, 3, 20000, NULL,  STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-15', '%Y-%m-%d'));
+INSERT INTO Auction VALUES (NULL, 3, 20000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-15', '%Y-%m-%d'));
 INSERT INTO Post VALUES (NULL, 3, 'testuser5', 'new car deal located in Edison, NJ');
 INSERT INTO Bid VALUES (NULL, 3, 'testuser1', 20000, 21000, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'));
 INSERT INTO Bid VALUES (NULL, 3, 'testuser3', 21001, 22000, STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
 
-INSERT INTO Auction VALUES (NULL, 2, 15000, NULL,  STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-15', '%Y-%m-%d'));
+INSERT INTO Auction VALUES (NULL, 2, 15000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-15', '%Y-%m-%d'));
 INSERT INTO Post VALUES (NULL, 4, 'testuser4', 'selling a Blue refurbished car located in Jersey City, NJ');
 
-INSERT INTO Auction VALUES (NULL, 2, 11000, NULL,  STR_TO_DATE('2022-06-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'));
+INSERT INTO Auction VALUES (NULL, 2, 11000, NULL, NULL, STR_TO_DATE('2022-06-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'));
 INSERT INTO Post VALUES (NULL, 5, 'testuser4', 'selling another red fit dealer refurbished car.');
 
-SELECT Auction.Auction_ID, Category_LEVEL1 AS Make, Category_LEVEL2 As Model, Category_LEVEL3 AS Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Bid
+SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Bid
 FROM Auction, Item, Bid 
 WHERE MONTH(START_TIME) = MONTH(NOW()) +1 AND Auction.Item_ID = Item.Item_ID AND Auction.Auction_ID = Bid.Auction_ID
 GROUP BY Auction.Auction_ID;

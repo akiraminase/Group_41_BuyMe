@@ -30,8 +30,8 @@
 				}
 			}
 			else if (reportType.equals("item")){
-				String tempTableQuery = "select i.category_level1, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price";
-				String str = "select temp.category_level1 as Item, sum(temp.closing_price) as Earnings from (" + tempTableQuery + ") as temp group by temp.category_level1;";
+				String tempTableQuery = "select i.make, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price";
+				String str = "select temp.make as Item, sum(temp.closing_price) as Earnings from (" + tempTableQuery + ") as temp group by temp.make;";
 				ResultSet result = stmt.executeQuery(str);
 				out.println("Item  --->  Earnings");
 				out.println("<br>");
@@ -43,30 +43,30 @@
 				
 			}
 			else if (reportType.equals("itemType")){
-				String tempTableQuery = "select i.category_level2, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price";
-				String str = "select temp.category_level2 as Item_Type, sum(temp.closing_price) as Earnings from (" + tempTableQuery + ") as temp group by temp.category_level2;";
+				String tempTableQuery = "select i.model, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price";
+				String str = "select temp.model as Item_Type, sum(temp.closing_price) as Earnings from (" + tempTableQuery + ") as temp group by temp.model;";
 				ResultSet result = stmt.executeQuery(str);
 				out.println("Item Type  --->  Earnings");
 				out.println("<br>");
 				out.println("<br>");
 				while (result.next()){
 					Statement stmt2 = con.createStatement();
-					String str2 = "select category_level1 from Item where category_level2 = \"" + result.getString("Item_Type") + "\"";
+					String str2 = "select make from Item where model = \"" + result.getString("Item_Type") + "\"";
 					ResultSet result2 = stmt2.executeQuery(str2);
 					result2.next();
-					String brand = result2.getString("category_level1");
+					String brand = result2.getString("make");
 					out.println(brand + " " + result.getString("Item_Type") + "  ---->  $" + result.getDouble("Earnings"));
 					out.println("<br>");
 				}
 			}
 			else if (reportType.equals("bestItems")){
-				String str = "select i.category_level1, i.category_level2, i.category_level3, i.item_condition, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price order by a.closing_price DESC;";
+				String str = "select i.make, i.model, i.year, i.item_condition, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price order by a.closing_price DESC;";
 				ResultSet result = stmt.executeQuery(str);
 				out.println("Item  ---->  Price");
 				out.println("<br>");
 				out.println("<br>");
 				while (result.next()){
-					out.println(result.getString("category_level1") + " " + result.getString("category_level2") + " " + result.getString("category_level3") + ", " + result.getString("item_condition") + "  ---->  $" + result.getString("closing_price"));
+					out.println(result.getString("make") + " " + result.getString("model") + " " + result.getString("year") + ", " + result.getString("item_condition") + "  ---->  $" + result.getString("closing_price"));
 					out.println("<br>");
 				}
 			}

@@ -69,7 +69,7 @@
 							//request.setAttribute("searchStrs", searchStrs);
 						}
 
-                        String SQLstr = "SELECT Auction.Auction_ID, Category_LEVEL1 AS Make, Category_LEVEL2 As Model, Category_LEVEL3 AS Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price "
+                        String SQLstr = "SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price "
                            + "FROM Auction, Item, Bid "
                            + "WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND "
                            + "Auction.Item_ID = Item.Item_ID AND "
