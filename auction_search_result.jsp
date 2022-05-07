@@ -23,14 +23,14 @@
             String model = request.getParameter("model");
             String year = request.getParameter("year");
             
-			String SQLstr = "SELECT Auction.Auction_ID, Category_LEVEL1 AS Make, Category_LEVEL2 As Model, Category_LEVEL3 AS Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price "
+			String SQLstr = "SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price "
                            + "FROM Auction, Item, Bid "
                            + "WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND "
                            + "Auction.Item_ID = Item.Item_ID AND "
                            + "Auction.Auction_ID = Bid.Auction_ID AND "
-                           + "Category_LEVEL1 = '"+make+"' AND "
-                           + "Category_LEVEL2 = '"+model+"' AND "
-                           + "Category_LEVEL3 = '"+year+"' "
+                           + "Make = '"+make+"' AND "
+                           + "Model = '"+model+"' AND "
+                           + "Year = '"+year+"' "
                            + "GROUP BY Auction.Auction_ID "
                            + "ORDER BY "+sortCategory+" "+sortOrder+";";
             //out.println(SQLstr);
@@ -59,13 +59,13 @@
 			}
             out.println("</table></form>");
             out.println("<a href='similar_auctions.jsp' >View Similar Items</a>");
-            String similarSQLstr = "SELECT Auction.Auction_ID, Category_LEVEL1 AS Make, Category_LEVEL2 As Model, Category_LEVEL3 AS Year, Item_Condition, Start_Time, Closing_Time, Initial_Price "
+            String similarSQLstr = "SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Start_Time, Closing_Time, Initial_Price "
                            + "FROM Auction, Item, Bid "
                            + "WHERE MONTH(Start_Time)=MONTH(NOW())+1 AND Closing_Time >= NOW() AND "
                            + "Auction.Item_ID = Item.Item_ID AND "
                            + "Auction.Auction_ID = Bid.Auction_ID AND "
-                           + "Category_LEVEL1 = '"+make+"' AND "
-                           + "Category_LEVEL2 = '"+model+"' "
+                           + "Make = '"+make+"' AND "
+                           + "Model = '"+model+"' "
                            + "ORDER BY "+sortCategory+" "+sortOrder+";";
             request.getSession().setAttribute("similarSQLstr", similarSQLstr);
 			//close the connection.

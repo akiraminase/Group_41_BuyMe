@@ -13,30 +13,28 @@ try {
 	String make = request.getParameter("make");
 	String model = request.getParameter("model");
 	String yearofcar = request.getParameter("yearofcar");
-	String time_auction_ends = request.getParameter("time_auction_ends") ;
 	
 	String username = (String) request.getSession().getAttribute("username");
 	
 	 Class.forName("com.mysql.jdbc.Driver");
 			
-	 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/buyme","root", "butter70");
+	 Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/buyme","root", "Root1234");
 Statement stmt = con.createStatement();
 
 
 
 
-String insert = "INSERT INTO Auction(Initial_Price, Minimum_Price, Closing_Time, time_auction_ends )"
+String insert = "INSERT INTO Auction(Initial_Price, Minimum_Price, Closing_Time)"
 		+ "VALUES (?, ?, ?, ?)";
 PreparedStatement ps = con.prepareStatement(insert);
 
 ps.setFloat(1, Initial_Price);
 ps.setFloat(2, Minimum_Price);
 ps.setString(3, Closing_Time) ;
-ps.setString(4, time_auction_ends) ;
 ps.executeUpdate();
 
 
- insert = "INSERT INTO Item(Category_Level1, Category_Level2, Category_Level3, Item_Condition )"
+ insert = "INSERT INTO Item(Make, Model, Year, Item_Condition )"
 		+ "VALUES (?, ?, ?, ?)";
  ps = con.prepareStatement(insert);
  ps.setString(1, make) ;
