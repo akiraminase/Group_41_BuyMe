@@ -14,6 +14,7 @@ CREATE TABLE Buyer (
     PRIMARY KEY (Username),
     FOREIGN KEY (username)
         REFERENCES End_user (username)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Seller (
@@ -21,27 +22,38 @@ CREATE TABLE Seller (
     PRIMARY KEY (Username),
     FOREIGN KEY (username)
         REFERENCES End_user (username)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE Item (
 	Item_ID INT UNSIGNED AUTO_INCREMENT,
-    Category_Level1 VARCHAR(20),
-    Category_level2 VARCHAR(20),
-    Category_level3 VARCHAR(20),
-    Item_Condition VARCHAR(20),
-    CHECK (Item_Condition IN ('New','Used','Refurbished')),
-    PRIMARY KEY (Item_ID)
+  Make VARCHAR(20),
+  Model VARCHAR(20),
+  Year VARCHAR(20),
+  Item_Condition VARCHAR(20),
+  CHECK (Item_Condition IN ('New','Used','Refurbished')),
+  PRIMARY KEY (Item_ID)
 );
+
+
+ALTER TABLE Item
+DROP column Category_Level2 ;
+
 CREATE TABLE Auction (
     Auction_ID INT UNSIGNED AUTO_INCREMENT,
 	Item_ID INT UNSIGNED NOT NULL, -- added
     Initial_Price DECIMAL(14 , 2 ),
     Minimum_Price DECIMAL(14 , 2 ),
+    Closing_Price DECIMAL(14 , 2 ),
     Start_Time DATETIME,
     Closing_Time DATETIME,
     PRIMARY KEY (Auction_ID),
     FOREIGN KEY (Item_ID)
         REFERENCES Item (Item_ID )
 );
+ALTER TABLE  Auction
+ADD  time_auction_ends time 
+AFTER  Closing_Time  ;
+
 CREATE TABLE Post (
 	Post_ID INT UNSIGNED AUTO_INCREMENT,
 	Auction_ID INT UNSIGNED NOT NULL,
@@ -49,18 +61,22 @@ CREATE TABLE Post (
     Description TEXT,
     PRIMARY KEY (Post_ID), 
     FOREIGN KEY (username)
-        REFERENCES Seller (username),
+        REFERENCES Seller (username)
+	ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (Auction_ID)
-        REFERENCES Auction (Auction_ID )
+        REFERENCES Auction (Auction_ID)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE Search_History (
     Username VARCHAR(20),
     Post_ID INT UNSIGNED,
     PRIMARY KEY (Username, Post_ID),
     FOREIGN KEY (username)
-        REFERENCES End_user (username),
+        REFERENCES End_user (username)
+	ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (Post_ID) 
         REFERENCES Post (Post_ID)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE Bid (
     Bid_ID INT UNSIGNED AUTO_INCREMENT,
@@ -71,9 +87,11 @@ CREATE TABLE Bid (
     Biding_Time DATETIME,
     PRIMARY KEY (Bid_ID),
     FOREIGN KEY (username)
-        REFERENCES Buyer (username),
+        REFERENCES Buyer (username)
+	ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (Auction_ID)
         REFERENCES Auction (Auction_ID)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE Alert (
     Alert_ID INT UNSIGNED AUTO_INCREMENT,
@@ -88,9 +106,11 @@ CREATE TABLE Alert (
 
     PRIMARY KEY (Alert_ID),
     FOREIGN KEY (username)
-        REFERENCES Buyer (username),
+        REFERENCES Buyer (username)
+	ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY (Auction_ID)
         REFERENCES Auction (Auction_ID)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Alert_Message (
@@ -101,6 +121,7 @@ CREATE TABLE Alert_Message (
     PRIMARY KEY (Alert_Message_ID),
     FOREIGN KEY (Alert_ID)
         REFERENCES Alert (Alert_ID)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE Admin_Staff(
 	Username VARCHAR(20),
@@ -123,6 +144,7 @@ CREATE TABLE Question (
     PRIMARY KEY (Question_ID),
     FOREIGN KEY (End_User)
         REFERENCES End_User (Username)
+	ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE Answer(
@@ -132,7 +154,7 @@ CREATE TABLE Answer(
     Customer_Representative VARCHAR(20) NOT NULL,
     Description TEXT,
     PRIMARY KEY (Answer_ID),
-	FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID),
+	FOREIGN KEY (Question_ID) REFERENCES Question(Question_ID) ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (Customer_Representative) REFERENCES Customer_Representative(Username)
 );
 
@@ -192,4 +214,11 @@ SELECT * FROM Auction, post, item WHERE Auction.Auction_ID = 2 AND item.item_ID 
 
 -- SELECT * FROM bid WHERE Auction_ID = ORDER BY Biding_Time DESC;
 
+
+SELECT * FROM end_user WHERE Username = 'test_user_1';
+SELECT * FROM Auction ;  
+SELECT * FROM Item ; 
+
+
 SELECT * FROM bid, auction, item WHERE username = 'testuser1' AND bid.Auction_id = Auction.Auction_ID AND Auction.Item_ID = Item.Item_ID GROUP BY Auction.Auction_ID;
+
