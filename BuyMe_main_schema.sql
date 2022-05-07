@@ -190,6 +190,6 @@ SELECT * FROM bid WHERE Auction_ID = 2 ORDER BY Biding_Time DESC;
 
 SELECT * FROM Auction, post, item WHERE Auction.Auction_ID = 2 AND item.item_ID = auction.item_ID AND Auction.Auction_ID = Post.Auction_ID;
 
-SELECT * FROM bid WHERE Auction_ID = ORDER BY Biding_Time DESC;
+-- SELECT * FROM bid WHERE Auction_ID = ORDER BY Biding_Time DESC;
 
 SELECT * FROM bid, auction, item WHERE username = 'testuser1' AND bid.Auction_id = Auction.Auction_ID AND Auction.Item_ID = Item.Item_ID GROUP BY Auction.Auction_ID;
