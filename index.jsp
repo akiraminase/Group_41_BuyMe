@@ -27,5 +27,9 @@
 	<br>
 	<body>
 <a href='new account registration.html' >register here </a>
+<br>
+<a href='administrator-login.jsp'>Click here to login as an administrator</a>
+<br>
+<a href='customer-representative-login.jsp'>Click here to login as a customer representative</a>
 </body>
 </html>
