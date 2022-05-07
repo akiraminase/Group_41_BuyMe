@@ -22,14 +22,18 @@
 			
 			String str = "select q.description as Question,a.description as Answer,a.customer_representative from Question q, Answer A where q.question_id = a.question_id;";
 			ResultSet result = stmt.executeQuery(str);
-			
-			out.println("QUESTION   ---->    ANSWER    ---->    ANSWERED BY");
-			out.println("<br>");
-			out.println("<br>");
+			out.println("<form method=\"post\" action=\"answer_search_result.jsp\">");
+			out.println("Search Keyword: <input type=\"text\" name=\"keyword\" required>");
+			out.println("<input type=\"submit\" value=\"Search\"><br>");
+			out.println("<table><Caption>Q&A</Caption>");
 			while(result.next()){
-				out.println(result.getString("Question") + "    ---->    "+ result.getString("Answer") + "    ---->    "+ result.getString("customer_representative"));
+				out.println(
+				"<tr><td>Question: "+ result.getString("Question")+"</td></tr>"+
+                "<tr><td>Answer: "+ result.getString("Answer")+"</td></tr>"+
+                "<tr><td>Answered By: "+ result.getString("customer_representative")+"</td></tr>");
 				out.println("<br>");
 			}
+			out.println("</table></form>");
 			//close the connection.
 			db.closeConnection(con);
 			} catch (Exception e) {

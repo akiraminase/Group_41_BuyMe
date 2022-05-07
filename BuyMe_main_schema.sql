@@ -191,7 +191,7 @@ INSERT INTO Bid VALUES (NULL, 3, 'testuser3', 21001, 22000, STR_TO_DATE('2022-05
 INSERT INTO Auction VALUES (NULL, 2, 15000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-15', '%Y-%m-%d'));
 INSERT INTO Post VALUES (NULL, 4, 'testuser4', 'selling a Blue refurbished car located in Jersey City, NJ');
 
-INSERT INTO Auction VALUES (NULL, 2, 11000, NULL, NULL, STR_TO_DATE('2022-06-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'));
+INSERT INTO Auction VALUES (NULL, 2, 11000, NULL, NULL, STR_TO_DATE('2022-06-05 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'));
 INSERT INTO Post VALUES (NULL, 5, 'testuser4', 'selling another red fit dealer refurbished car.');
 
 SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Bid
@@ -214,4 +214,13 @@ SELECT * FROM Item ;
 
 
 SELECT * FROM bid, auction, item WHERE username = 'testuser1' AND bid.Auction_id = Auction.Auction_ID AND Auction.Item_ID = Item.Item_ID GROUP BY Auction.Auction_ID;
+
+INSERT INTO question VALUES (NULL, 'testuser1', 'How do i buy?');
+INSERT INTO admin_staff VALUES ('admin', NULL, 'testpassword');
+INSERT INTO customer_representative VALUES ('rep1', NULL, 'testpassword','admin');
+INSERT INTO answer VALUES (NULL, 1, 'testuser1', 'rep1', 'please follow our instructions.');
+
+SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Start_Time, Closing_Time, Initial_Price FROM Auction, Item WHERE MONTH(Start_Time)=MONTH(NOW())+1 AND Auction.Item_ID = Item.Item_ID AND Make = 'Honda' AND Model = 'Fit' ORDER BY Initial_Price ASC;
+
+SELECT MONTH(Start_Time) FROM auction
 

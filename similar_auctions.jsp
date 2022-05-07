@@ -33,12 +33,11 @@
                 "<tr><td>Year: "+ result.getString("Year")+"</td></tr>"+
                 "<tr><td>Condition: "+ result.getString("Item_Condition")+"</td></tr>"+
                 "<tr><td>Initial Price: "+ result.getString("Initial_Price")+"</td></tr>"+
-                "<tr><td>Start Time: "+ result.getString("Starting_Time")+" </td></tr>"+
                 "<tr><td>Close Time: "+ result.getString("Closing_Time")+" </td></tr>"+
-                "<tr><td><input type=\"submit\" value=\"View\"></td></tr>");
+                "<tr><td><input type='submit' value='View Auction #"+auctionID+"' name='selected'></td></tr>");
                 out.println("<br><br><br>");
 			}
-            out.println("</table></form>");;
+            out.println("</table></form>");
 			//close the connection.
 			db.closeConnection(con);
 			

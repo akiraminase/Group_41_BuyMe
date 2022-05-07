@@ -60,10 +60,9 @@
             out.println("</table></form>");
             out.println("<a href='similar_auctions.jsp' >View Similar Items</a>");
             String similarSQLstr = "SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Start_Time, Closing_Time, Initial_Price "
-                           + "FROM Auction, Item, Bid "
+                           + "FROM Auction, Item "
                            + "WHERE MONTH(Start_Time)=MONTH(NOW())+1 AND Closing_Time >= NOW() AND "
                            + "Auction.Item_ID = Item.Item_ID AND "
-                           + "Auction.Auction_ID = Bid.Auction_ID AND "
                            + "Make = '"+make+"' AND "
                            + "Model = '"+model+"' "
                            + "ORDER BY "+sortCategory+" "+sortOrder+";";
