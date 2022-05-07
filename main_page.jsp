@@ -27,8 +27,9 @@
 				result.next();
 				if(result.getString("Password").equals(password)){
                     request.getSession().setAttribute("username", username);
+                    request.getSession().setAttribute("password", password);
                     //TODO: check alert conditions and make alert by insert
-                    out.println( "Welcome to BuyMe Car Auction Market!<br>" );
+                    out.println( "Welcome to BuyMe Car Auction Market!" );
 					String alertsql = "SELECT COUNT(*) AS Unread_Alert_N FROM Alert_Message, Alert WHERE Alert_Message.Alert_ID = Alert.Alert_ID AND Username = '"+username+"' AND Is_Read = 0;";
                     result = stmt.executeQuery(alertsql);
                     try{
@@ -103,11 +104,27 @@
 					try{
 						result.next();
 						if(result.getString("Username").equals(username)){
-							out.println( " <a href='sellerpage.jsp' >Enter seller mode </a><br> " );
+							out.println( " <a href='sellerpage.jsp' >enter seller mode </a> " );
 						}
 					}catch (Exception e){
 						;//do nothing
 					}
+					
+					out.println("<br>");
+					out.println("<br>");
+					out.println("<br>");
+					
+					out.println("<form method=\"get\" action=\"post-question1.html\">");
+					out.println("<input type=\"submit\" value=\"Click here to post a question for customer representatives\" />");
+					out.println("</form>");
+							
+					out.println("<br>");
+					out.println("<br>");
+					out.println("<br>");
+					
+					out.println("<form method=\"get\" action=\"view-answers.jsp\">");
+					out.println("<input type=\"submit\" value=\"Click here to see all answered questions\" />");
+					out.println("</form>");
 
 				}else{
 					out.print("Wrong Password");
@@ -118,6 +135,9 @@
 			}
 			//close the connection.
 			db.closeConnection(con);
+			out.println("<br>");
+			out.println("<br>");
+			out.println("<br>");
 			out.println( " <a href='index.jsp' >Logout </a> " );
 			} catch (Exception e) {
 			out.print(e);
