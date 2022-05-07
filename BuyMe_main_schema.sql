@@ -26,13 +26,18 @@ CREATE TABLE Seller (
 );
 CREATE TABLE Item (
 	Item_ID INT UNSIGNED AUTO_INCREMENT,
-    Category_Level1 VARCHAR(20),
-    Category_level2 VARCHAR(20),
-    Category_level3 VARCHAR(20),
-    Item_Condition VARCHAR(20),
-    CHECK (Item_Condition IN ('New','Used','Refurbished')),
-    PRIMARY KEY (Item_ID)
+  Make VARCHAR(20),
+  Model VARCHAR(20),
+  Year VARCHAR(20),
+  Item_Condition VARCHAR(20),
+  CHECK (Item_Condition IN ('New','Used','Refurbished')),
+  PRIMARY KEY (Item_ID)
 );
+
+
+ALTER TABLE Item
+DROP column Category_Level2 ;
+
 CREATE TABLE Auction (
     Auction_ID INT UNSIGNED AUTO_INCREMENT,
 	Item_ID INT UNSIGNED NOT NULL, -- added
@@ -45,6 +50,10 @@ CREATE TABLE Auction (
     FOREIGN KEY (Item_ID)
         REFERENCES Item (Item_ID )
 );
+ALTER TABLE  Auction
+ADD  time_auction_ends time 
+AFTER  Closing_Time  ;
+
 CREATE TABLE Post (
 	Post_ID INT UNSIGNED AUTO_INCREMENT,
 	Auction_ID INT UNSIGNED NOT NULL,
@@ -205,4 +214,11 @@ SELECT * FROM Auction, post, item WHERE Auction.Auction_ID = 2 AND item.item_ID 
 
 SELECT * FROM bid WHERE Auction_ID = ORDER BY Biding_Time DESC;
 
+
+SELECT * FROM end_user WHERE Username = 'test_user_1';
+SELECT * FROM Auction ;  
+SELECT * FROM Item ; 
+
+
 SELECT * FROM bid, auction, item WHERE username = 'testuser1' AND bid.Auction_id = Auction.Auction_ID AND Auction.Item_ID = Item.Item_ID GROUP BY Auction.Auction_ID;
+
