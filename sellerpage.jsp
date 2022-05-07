@@ -10,7 +10,9 @@
 <h1>Your account is currently in seller mode </h1>
 
 
-out.println( " <a href='makeauctiona.html' > to make a auction  click here </a> " );
+
+to make a auction for item type <a href='makeauctiona.html' > click here </a>;
+
 
 </body>
 </html>
