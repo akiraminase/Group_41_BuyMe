@@ -1,7 +1,7 @@
 # Group_41_BuyMe
 Test Credentials:
-  Username: test_user_1
-  Password: test_password_1
+  Username: testuser1, testuser2, testuser3, testuser4, testuser5
+  Password: testpassword
   
 Instructions to run:
 1. Run sql file with MySQL workbench to load database structure on your localhost
