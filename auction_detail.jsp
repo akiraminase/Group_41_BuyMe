@@ -15,9 +15,9 @@
 			ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
-
             String username = (String) request.getSession().getAttribute("username");
 			String auctionID = request.getParameter("selected").split("#")[1];
+			request.getSession().setAttribute("auctionID", auctionID);
             
 			String SQLstr = "SELECT * FROM Auction, post, item WHERE Auction.Auction_ID = "+auctionID+" AND item.item_ID = auction.item_ID AND Auction.Auction_ID = Post.Auction_ID;";
 			ResultSet result = stmt.executeQuery(SQLstr);
@@ -25,18 +25,38 @@
 				result.next();
 				out.println("<form method=\"post\" action=\"user_history.jsp\">");
 				out.println(
-                "<table><Caption>Auction Detail</Caption><tr><td>Make: "+ result.getString("Category_LEVEL1")+"</td></tr>"+
-                "<tr><td>Model: "+ result.getString("Category_LEVEL2")+"</td></tr>"+
-                "<tr><td>Year: "+ result.getString("Category_LEVEL3")+"</td></tr>"+
+                "<table><Caption>Auction Detail</Caption><tr><td>Make: "+ result.getString("Make")+"</td></tr>"+
+                "<tr><td>Model: "+ result.getString("Model")+"</td></tr>"+
+                "<tr><td>Year: "+ result.getString("Year")+"</td></tr>"+
                 "<tr><td>Condition: "+ result.getString("Item_Condition")+"</td></tr>"+
                 "<tr><td>Initial Price: "+ result.getString("Initial_Price")+"</td></tr>"+
                 "<tr><td>Close Time: "+ result.getString("Closing_Time")+" </td></tr>"+
 				"<tr><td>Seller: <a href='user_history.jsp?user="+result.getString("Username")+"'>"+result.getString("Username")+"</a></td></tr>"+
+				"<tr><td>Winner: <a href='user_history.jsp?user="+result.getString("Winner")+"'>"+result.getString("Winner")+"</a></td></tr>"+
 				"<tr><td>Description: "+ result.getString("Description")+"</td></tr></table></form>"
 				);
 			} catch (Exception e) {
 				out.println(e);
 			}
+			out.println("<br>");
+			out.println("<br>");
+			out.println("<br>");
+					
+			out.println("Start a new bid");
+			out.println("<br><form method=\"post\" action=\"new_bid.jsp\"><table>");
+			out.println("<tr><td>Price</td><td><input type=\"text\" name=\"price\" required></td></tr>");
+			out.println("</table><input type=\"submit\" value=\"Bid\"></form><br>");
+			
+			out.println("<br>");
+			out.println("<br>");
+			out.println("<br>");
+			
+			out.println("Set up automatic bid");
+			out.println("<br><form method=\"post\" action=\"new_autobid.jsp\"><table>");
+			out.println("<tr><td>Upper Limit</td><td><input type=\"text\" name=\"upperLimit\" required></td></tr>");
+			out.println("<tr><td>Increment</td><td><input type=\"text\" name=\"increment\" required></td></tr>");
+			out.println("</table><input type=\"submit\" value=\"Set\"></form><br>");
+				
 			SQLstr = "SELECT * FROM bid WHERE Auction_ID ="+auctionID+" ORDER BY Biding_Time DESC;";
 			result = stmt.executeQuery(SQLstr);
 			out.println("<form method=\"post\" action=\"user_history.jsp\"><table><Caption>Bid History</Caption>");
