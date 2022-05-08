@@ -18,19 +18,24 @@
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 
-
-            //get unread alert numbers
 			String str = "SELECT * FROM end_user WHERE Username = '"+username+"';";
 			ResultSet result = stmt.executeQuery(str);
+
+			
+
 
 			try{
 				result.next();
 				if(result.getString("Password").equals(password)){
                     request.getSession().setAttribute("username", username);
                     request.getSession().setAttribute("password", password);
-                    //TODO: check alert conditions and make alert by insert
+					//TODO: place all autobid by insert
+					//TODO: Alert all autobid owners
+					//TODO: define all owners by insert if min price is null or reached and alert
+					
                     out.println( "Welcome to BuyMe Car Auction Market!" );
-					String alertsql = "SELECT COUNT(*) AS Unread_Alert_N FROM Alert_Message, Alert WHERE Alert_Message.Alert_ID = Alert.Alert_ID AND Username = '"+username+"' AND Is_Read = 0;";
+					//get unread alert numbers since last_read_time
+					String alertsql = "SELECT COUNT(*) AS Unread_Alert_N FROM Alert LEFT JOIN ON alert.username = buyer.username WHERE Sent_Time> last_read_time AND Username = '"+username+"';";
                     result = stmt.executeQuery(alertsql);
                     try{
 						result.next();

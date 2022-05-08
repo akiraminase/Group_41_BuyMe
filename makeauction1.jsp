@@ -40,8 +40,8 @@ while(rs.next()) {
 	 Item_ID = rs.getInt(1) ;
 }
 
-insert = "INSERT INTO Auction(Auction_ID, Item_ID, Initial_Price, Minimum_Price, Closing_Time, Closing_price, Start_Time )"
-		+ "VALUES (NULL, ?, ?, ?, ?, Null, NOW())";
+insert = "INSERT INTO Auction(Auction_ID, Item_ID, Initial_Price, Minimum_Price, Closing_Time, Closing_price, Start_Time, Winner)"
+		+ "VALUES (NULL, ?, ?, ?, ?, Null, NOW(), NULL)";
 ps = con.prepareStatement(insert);
 ps.setInt(1, Item_ID) ;
 ps.setFloat(2, Initial_Price);
@@ -64,16 +64,11 @@ ps.setInt(1, Auction_ID) ;
 ps.setString(2, username) ;
 ps.setString(3, description) ;
 ps.executeUpdate();
-//insert = "INSERT INTO Item(Item_Condition)"
-	//	+ "VALUES (?)";
 
-//ps = con.prepareStatement(insert);
-//ps.setString(1,Item_Condition );
-//ps.executeUpdate();
+//TODO: alert user of new item
+
 
 con.close();
-//int insert=stmt.executeUpdate("insert into Auction( Inital_Price, Minimum_Price, Closing_Time)values('"+Inital_Price+"','"+Minimum_Price+"','"+Closing_Time+"')");
-//int insert2=stmt.executeUpdate("insert into Item(Item_Condition)values('"+Item_Condition+"')"); 
 out.println( " <a href='index.jsp' >return to main page </a> " );
  }
  catch (Exception e){

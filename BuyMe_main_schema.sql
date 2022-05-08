@@ -11,6 +11,7 @@ CREATE TABLE End_User (
 
 CREATE TABLE Buyer (
     Username VARCHAR(20),
+    last_read_time DATETIME,
     PRIMARY KEY (Username),
     FOREIGN KEY (username)
         REFERENCES End_user (username)
@@ -42,6 +43,7 @@ CREATE TABLE Auction (
     Closing_Price DECIMAL(14 , 2 ),
     Start_Time DATETIME,
     Closing_Time DATETIME,
+    Winner VARCHAR(20) REFERENCES Buyer(Username),
     PRIMARY KEY (Auction_ID),
     FOREIGN KEY (Item_ID)
         REFERENCES Item (Item_ID )
@@ -76,7 +78,8 @@ CREATE TABLE Bid (
 	Auction_ID INT UNSIGNED NOT NULL,
     Username VARCHAR(20),
     Price DECIMAL(14 , 2 ), /*new field*/
-    Upper_Limit DECIMAL(14 , 2 ),
+    Type VARCHAR(20),
+    CHECK (Type IN ('Manual','Auto')),
     Biding_Time DATETIME,
     PRIMARY KEY (Bid_ID),
     FOREIGN KEY (username)
@@ -86,36 +89,43 @@ CREATE TABLE Bid (
         REFERENCES Auction (Auction_ID)
 	ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE Auto_Bid (
+	Auto_Bid_ID INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	Auction_ID INT UNSIGNED NOT NULL,
+    Username VARCHAR(20),
+	Upper_Limit DECIMAL(14 , 2 ),
+    Creation_Time DATETIME,
+    FOREIGN KEY (username)
+        REFERENCES Buyer (username)
+	ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (Auction_ID)
+        REFERENCES Auction (Auction_ID)
+	ON UPDATE CASCADE ON DELETE CASCADE
+);
 CREATE TABLE Alert (
     Alert_ID INT UNSIGNED AUTO_INCREMENT,
-	Alert_Type VARCHAR(20),
-    CHECK (Alert_Type IN ('New Item','Higher Bid')),
     Username VARCHAR(20),
-    Auction_ID INT UNSIGNED, -- Auction id if a Auction alert
-	Make VARCHAR(20), -- these if a new item  alert
-    Model VARCHAR(20),
-    Year VARCHAR(20),
-    Creation_Time DATETIME,
+	Message TEXT,
+    Sent_Time DATETIME,
 
     PRIMARY KEY (Alert_ID),
     FOREIGN KEY (username)
         REFERENCES Buyer (username)
-	ON UPDATE CASCADE ON DELETE CASCADE,
-	FOREIGN KEY (Auction_ID)
-        REFERENCES Auction (Auction_ID)
 	ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE Alert_Message (
-    Alert_Message_ID INT UNSIGNED AUTO_INCREMENT,
-	Alert_ID INT UNSIGNED,
-    Sent_Time DATETIME,
-    Is_Read BIT,
-    PRIMARY KEY (Alert_Message_ID),
-    FOREIGN KEY (Alert_ID)
-        REFERENCES Alert (Alert_ID)
-	ON UPDATE CASCADE ON DELETE CASCADE
+CREATE TABLE Item_Alert_Manager (
+    Alert_ID INT UNSIGNED AUTO_INCREMENT,
+    Username VARCHAR(20),
+    Make VARCHAR(20),
+    Model VARCHAR(20),
+    Year VARCHAR(20),
+    PRIMARY KEY (Alert_ID),
+     FOREIGN KEY (username)
+        REFERENCES Buyer (username)
 );
+
 CREATE TABLE Admin_Staff(
 	Username VARCHAR(20),
     Email VARCHAR(40),
@@ -158,10 +168,10 @@ INSERT INTO end_user VALUES ("testuser3", "testuser3@gmail.com", "testpassword")
 INSERT INTO end_user VALUES ("testuser4", "testuser4@gmail.com", "testpassword");
 INSERT INTO end_user VALUES ("testuser5", "testuser5@gmail.com", "testpassword");
 
-INSERT INTO buyer VALUES ("testuser1");
-INSERT INTO buyer VALUES ("testuser2");
-INSERT INTO buyer VALUES ("testuser3");
-INSERT INTO buyer VALUES ("testuser4");
+INSERT INTO buyer VALUES ("testuser1", NULL);
+INSERT INTO buyer VALUES ("testuser2", NULL);
+INSERT INTO buyer VALUES ("testuser3", NULL);
+INSERT INTO buyer VALUES ("testuser4", NULL);
 
 INSERT INTO seller VALUES ("testuser3");
 INSERT INTO seller VALUES ("testuser4");
@@ -171,68 +181,31 @@ INSERT INTO item VALUES (NULL, "Toyota", "Corolla", "2017", "Used");
 INSERT INTO item VALUES (NULL, "Honda", "Fit", "2010", "Refurbished");
 INSERT INTO item VALUES (NULL, "Nissan", "Altima", "2022", "New");
 
-INSERT INTO Auction VALUES (NULL, 1, 15000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-20 00:00:00', '%Y-%m-%d %T'));
+INSERT INTO Auction VALUES (NULL, 1, 15000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-20 00:00:00', '%Y-%m-%d %T'), NULL);
 INSERT INTO Post VALUES (NULL, 1, 'testuser3', 'selling car for upgrade. Located in New Brunswick, NJ');
-INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 15000, 20000, STR_TO_DATE('2022-05-05 19:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 1, 'testuser2', 16000, 21000, STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 17000, 20000, STR_TO_DATE('2022-05-06 21:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 15000, 'Manual', STR_TO_DATE('2022-05-05 19:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 1, 'testuser2', 16000, 'Manual',STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 17000, 'Manual',STR_TO_DATE('2022-05-06 21:00:00', '%Y-%m-%d %T'));
 
-INSERT INTO Auction VALUES (NULL, 2, 11000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'));
+INSERT INTO Auction VALUES (NULL, 2, 11000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'), NULL);
 INSERT INTO Post VALUES (NULL, 2, 'testuser4', 'selling red fit dealer refurbished car.');
-INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 11000, 15000, STR_TO_DATE('2022-06-05 19:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 2, 'testuser2', 12000, 21000, STR_TO_DATE('2022-06-06 20:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 17000, 21000, STR_TO_DATE('2022-06-06 21:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 11000, 'Manual',STR_TO_DATE('2022-06-05 19:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 2, 'testuser2', 12000, 'Manual',STR_TO_DATE('2022-06-06 20:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 17000, 'Manual',STR_TO_DATE('2022-06-06 21:00:00', '%Y-%m-%d %T'));
 
-INSERT INTO Auction VALUES (NULL, 3, 20000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-15', '%Y-%m-%d'));
+INSERT INTO Auction VALUES (NULL, 3, 20000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-15', '%Y-%m-%d'), NULL);
 INSERT INTO Post VALUES (NULL, 3, 'testuser5', 'new car deal located in Edison, NJ');
-INSERT INTO Bid VALUES (NULL, 3, 'testuser1', 20000, 21000, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 3, 'testuser3', 21001, 22000, STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 3, 'testuser1', 20000, 'Manual',STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 3, 'testuser3', 21001, 'Manual',STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
 
-INSERT INTO Auction VALUES (NULL, 2, 15000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-15', '%Y-%m-%d'));
+INSERT INTO Auction VALUES (NULL, 2, 15000, NULL, NULL,STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-15', '%Y-%m-%d'), NULL);
 INSERT INTO Post VALUES (NULL, 4, 'testuser4', 'selling a Blue refurbished car located in Jersey City, NJ');
 
-INSERT INTO Auction VALUES (NULL, 2, 11000, NULL, NULL, STR_TO_DATE('2022-06-05 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'));
+INSERT INTO Auction VALUES (NULL, 2, 11000, NULL, NULL,STR_TO_DATE('2022-06-05 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'), NULL);
 INSERT INTO Post VALUES (NULL, 5, 'testuser4', 'selling another red fit dealer refurbished car.');
 
-SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Bid
-FROM Auction, Item, Bid 
-WHERE MONTH(START_TIME) = MONTH(NOW()) +1 AND Auction.Item_ID = Item.Item_ID AND Auction.Auction_ID = Bid.Auction_ID
-GROUP BY Auction.Auction_ID;
-
-SELECT * FROM Alert_Message, Alert WHERE Alert_Message.Alert_ID = Alert.Alert_ID AND Username = 'testuser3' AND Is_Read = 0;
-
-SELECT * FROM bid WHERE Auction_ID = 2 ORDER BY Biding_Time DESC;
-
-SELECT * FROM Auction, post, item WHERE Auction.Auction_ID = 2 AND item.item_ID = auction.item_ID AND Auction.Auction_ID = Post.Auction_ID;
-
--- SELECT * FROM bid WHERE Auction_ID = ORDER BY Biding_Time DESC;
-
-
-SELECT * FROM end_user WHERE Username = 'test_user_1';
-SELECT * FROM Auction ;  
-SELECT * FROM Item ; 
-
-
-SELECT * FROM bid, auction, item WHERE username = 'testuser1' AND bid.Auction_id = Auction.Auction_ID AND Auction.Item_ID = Item.Item_ID GROUP BY Auction.Auction_ID;
 
 INSERT INTO question VALUES (NULL, 'testuser1', 'How do i buy?');
 INSERT INTO admin_staff VALUES ('admin', NULL, 'testpassword');
 INSERT INTO customer_representative VALUES ('rep1', NULL, 'testpassword','admin');
 INSERT INTO answer VALUES (NULL, 1, 'testuser1', 'rep1', 'please follow our instructions.');
-
-SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Start_Time, Closing_Time, Initial_Price FROM Auction, Item WHERE MONTH(Start_Time)=MONTH(NOW())+1 AND Auction.Item_ID = Item.Item_ID AND Make = 'Honda' AND Model = 'Fit' ORDER BY Initial_Price ASC;
-
-SELECT MONTH(Start_Time) FROM auction;
-
-SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price 
-FROM Auction, Item, Bid
-WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND
-Auction.Item_ID = Item.Item_ID AND
-Auction.Auction_ID = Bid.Auction_ID
-GROUP BY Auction.Auction_ID UNION
-SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, Initial_Price AS Current_Price 
-FROM Auction, Item
-WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND
-Auction.Item_ID = Item.Item_ID AND Auction_ID NOT IN (SELECT DISTINCT Auction_ID FROM Bid);
-
-SELECT * FROM (SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price FROM Auction, Item, Bid WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND Auction.Item_ID = Item.Item_ID AND Auction.Auction_ID = Bid.Auction_ID AND Make = 'Honda' AND Model = 'Fit' AND Year = '2000' GROUP BY Auction.Auction_ID UNION SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, Initial_Price AS Current_Price FROM Auction, Item WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND Make = 'Honda' AND Model = 'Fit' AND Year = '2000' AND Auction.Item_ID = Item.Item_ID AND Auction_ID NOT IN (SELECT DISTINCT Auction_ID FROM Bid))a ORDER BY Initial_Price ASC;
