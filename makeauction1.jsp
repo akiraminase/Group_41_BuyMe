@@ -36,35 +36,36 @@ PreparedStatement ps = con.prepareStatement(insert);
  ps.setString(4, Item_Condition) ;
  ps.executeUpdate();
 
- insert = "INSERT INTO Auction(Auction_ID, Item_ID, Initial_Price, Minimum_Price, Closing_Time, Closing_price, Start_Time )"
-		+ "VALUES (NULL, LAST_INSERT_ID(), ?, ?, ?, Null, NOW())";
- ps = con.prepareStatement(insert);
+int Item_ID = 0 ;
+ResultSet rs=ps.executeQuery("SELECT * FROM Item ORDER BY Item_ID DESC Limit 1;"); 
+while(rs.next()) {
+	 Item_ID = rs.getInt(1) ;
+}
 
-ps.setFloat(1, Initial_Price);
-ps.setFloat(2, Minimum_Price);
-ps.setString(3, Closing_Time) ;
+insert = "INSERT INTO Auction(Auction_ID, Item_ID, Initial_Price, Minimum_Price, Closing_Time, Closing_price, Start_Time )"
+		+ "VALUES (NULL, ?, ?, ?, ?, Null, NOW())";
+ps = con.prepareStatement(insert);
+ps.setInt(1, Item_ID) ;
+ps.setFloat(2, Initial_Price);
+ps.setFloat(3, Minimum_Price);
+ps.setString(4, Closing_Time) ;
 
 ps.executeUpdate();
 
 
+int Auction_ID = 0 ;
+ rs=ps.executeQuery("SELECT * FROM Auction ORDER BY Auction_ID DESC Limit 1;"); 
+while(rs.next()) {
+	 Auction_ID = rs.getInt(1) ;
+}
 
-  
-
- //int Auction_ID = 0 ;
-// ResultSet rs=ps.executeQuery("SELECT * FROM Auction ORDER BY Auction_ID DESC Limit 1;"); 
-// while(rs.next()) {
-	// Auction_ID = rs.getInt(1) ;
- //}
- 
-
-
- 
- insert = "INSERT INTO Post(Post_ID, Auction_ID, username,  Description)" 
-		 + "VALUES (NULL,LAST_INSERT_ID(), ?, ?)";
- ps = con.prepareStatement(insert);
- ps.setString(1, username) ;
- ps.setString(2, description) ;
- ps.executeUpdate();
+insert = "INSERT INTO Post(Post_ID, Auction_ID, username,  Description)" 
+		 + "VALUES (NULL, ?, ?, ?)";
+ps = con.prepareStatement(insert);
+ps.setInt(1, Auction_ID) ;
+ps.setString(2, username) ;
+ps.setString(3, description) ;
+ps.executeUpdate();
 //insert = "INSERT INTO Item(Item_Condition)"
 	//	+ "VALUES (?)";
 
