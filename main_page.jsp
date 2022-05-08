@@ -74,7 +74,10 @@
                            + "WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND "
                            + "Auction.Item_ID = Item.Item_ID AND "
                            + "Auction.Auction_ID = Bid.Auction_ID "
-                           + "GROUP BY Auction.Auction_ID ";
+                           + "GROUP BY Auction.Auction_ID "
+						   + "UNION SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, Initial_Price AS Current_Price "
+						   + "FROM Auction, Item WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND "
+						   + "Auction.Item_ID = Item.Item_ID AND Auction_ID NOT IN (SELECT DISTINCT Auction_ID FROM Bid);";
 
                         result = stmt.executeQuery(SQLstr);
                         //HttpSession session = request.getSession(); 

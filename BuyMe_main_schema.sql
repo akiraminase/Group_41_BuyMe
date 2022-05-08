@@ -222,5 +222,17 @@ INSERT INTO answer VALUES (NULL, 1, 'testuser1', 'rep1', 'please follow our inst
 
 SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Start_Time, Closing_Time, Initial_Price FROM Auction, Item WHERE MONTH(Start_Time)=MONTH(NOW())+1 AND Auction.Item_ID = Item.Item_ID AND Make = 'Honda' AND Model = 'Fit' ORDER BY Initial_Price ASC;
 
-SELECT MONTH(Start_Time) FROM auction
+SELECT MONTH(Start_Time) FROM auction;
 
+SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price 
+FROM Auction, Item, Bid
+WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND
+Auction.Item_ID = Item.Item_ID AND
+Auction.Auction_ID = Bid.Auction_ID
+GROUP BY Auction.Auction_ID UNION
+SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, Initial_Price AS Current_Price 
+FROM Auction, Item
+WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND
+Auction.Item_ID = Item.Item_ID AND Auction_ID NOT IN (SELECT DISTINCT Auction_ID FROM Bid);
+
+SELECT * FROM (SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price FROM Auction, Item, Bid WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND Auction.Item_ID = Item.Item_ID AND Auction.Auction_ID = Bid.Auction_ID AND Make = 'Honda' AND Model = 'Fit' AND Year = '2000' GROUP BY Auction.Auction_ID UNION SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, Initial_Price AS Current_Price FROM Auction, Item WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND Make = 'Honda' AND Model = 'Fit' AND Year = '2000' AND Auction.Item_ID = Item.Item_ID AND Auction_ID NOT IN (SELECT DISTINCT Auction_ID FROM Bid))a ORDER BY Initial_Price ASC;

@@ -23,7 +23,7 @@
             String model = request.getParameter("model");
             String year = request.getParameter("year");
             
-			String SQLstr = "SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price "
+			String SQLstr = "SELECT * FROM (SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price "
                            + "FROM Auction, Item, Bid "
                            + "WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND "
                            + "Auction.Item_ID = Item.Item_ID AND "
@@ -32,7 +32,14 @@
                            + "Model = '"+model+"' AND "
                            + "Year = '"+year+"' "
                            + "GROUP BY Auction.Auction_ID "
-                           + "ORDER BY "+sortCategory+" "+sortOrder+";";
+                           + "UNION SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, Initial_Price AS Current_Price "
+						   + "FROM Auction, Item WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND "
+                           + "Make = '"+make+"' AND "
+                           + "Model = '"+model+"' AND "
+                           + "Year = '"+year+"' AND "
+						   + "Auction.Item_ID = Item.Item_ID AND Auction_ID NOT IN (SELECT DISTINCT Auction_ID FROM Bid))a"
+                           + " ORDER BY "+sortCategory+" "+sortOrder+";";
+
             //out.println(SQLstr);
             
             
