@@ -20,13 +20,15 @@
 
 			String alertsql = "SELECT Sent_Time, Message FROM Alert LEFT JOIN Buyer ON alert.username = buyer.username WHERE Sent_Time> last_read_time AND alert.Username = '"+username+"';";
 			ResultSet result = stmt.executeQuery(SQLstr);
-            out.println("<form method=\"post\" action=\"auctiondetail.jsp\"><table><Caption>Current Alerts</Caption>");
+            out.println("<table><Caption>Current Alerts</Caption>");
             while(result.next()){
                 out.println(
 				"<tr><td>Time: "+ result.getString("Sent_Time")+"</td></tr>"+
 				"<tr><td>Message: "+ result.getString("Message")+"</td></tr>");
                 out.println("<br>");
+				out.println("<br>");
 			}
+			out.println("</table>");
 			//Update last_read time
 			String update = "UPDATE Buyer SET Last_read_time = NOW() WHERE username ='"+username+"';";
 			PreparedStatement ps = con.prepareStatement(update);

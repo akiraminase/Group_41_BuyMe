@@ -33,6 +33,7 @@
                 "<tr><td>Initial Price: "+ result.getString("Initial_Price")+"</td></tr>"+
                 "<tr><td>Close Time: "+ result.getString("Closing_Time")+" </td></tr>"+
 				"<tr><td>Seller: <a href='user_history.jsp?user="+result.getString("Username")+"'>"+result.getString("Username")+"</a></td></tr>"+
+				"<tr><td>Winner: <a href='user_history.jsp?user="+result.getString("Winner")+"'>"+result.getString("Winner")+"</a></td></tr>"+
 				"<tr><td>Description: "+ result.getString("Description")+"</td></tr></table></form>"
 				);
 			} catch (Exception e) {

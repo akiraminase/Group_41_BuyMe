@@ -77,9 +77,7 @@ CREATE TABLE Bid (
     Bid_ID INT UNSIGNED AUTO_INCREMENT,
 	Auction_ID INT UNSIGNED NOT NULL,
     Username VARCHAR(20),
-    Price DECIMAL(14 , 2 ), /*new field*/
-    Type VARCHAR(20),
-    CHECK (Type IN ('Manual','Auto')),
+    Price DECIMAL(14 , 2 ),
     Biding_Time DATETIME,
     PRIMARY KEY (Bid_ID),
     FOREIGN KEY (username)
@@ -95,6 +93,7 @@ CREATE TABLE Auto_Bid (
 	Auction_ID INT UNSIGNED NOT NULL,
     Username VARCHAR(20),
 	Upper_Limit DECIMAL(14 , 2 ),
+    Increment DECIMAL(14 , 2 ),
     Creation_Time DATETIME,
     FOREIGN KEY (username)
         REFERENCES Buyer (username)
@@ -183,20 +182,20 @@ INSERT INTO item VALUES (NULL, "Nissan", "Altima", "2022", "New");
 
 INSERT INTO Auction VALUES (NULL, 1, 15000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-20 00:00:00', '%Y-%m-%d %T'), NULL);
 INSERT INTO Post VALUES (NULL, 1, 'testuser3', 'selling car for upgrade. Located in New Brunswick, NJ');
-INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 15000, 'Manual', STR_TO_DATE('2022-05-05 19:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 1, 'testuser2', 16000, 'Manual',STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 17000, 'Manual',STR_TO_DATE('2022-05-06 21:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 15000,  STR_TO_DATE('2022-05-05 19:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 1, 'testuser2', 16000, STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 1, 'testuser1', 17000, STR_TO_DATE('2022-05-06 21:00:00', '%Y-%m-%d %T'));
 
 INSERT INTO Auction VALUES (NULL, 2, 11000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-20', '%Y-%m-%d'), NULL);
 INSERT INTO Post VALUES (NULL, 2, 'testuser4', 'selling red fit dealer refurbished car.');
-INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 11000, 'Manual',STR_TO_DATE('2022-06-05 19:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 2, 'testuser2', 12000, 'Manual',STR_TO_DATE('2022-06-06 20:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 17000, 'Manual',STR_TO_DATE('2022-06-06 21:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 11000, STR_TO_DATE('2022-06-05 19:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 2, 'testuser2', 12000, STR_TO_DATE('2022-06-06 20:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 2, 'testuser1', 17000, STR_TO_DATE('2022-06-06 21:00:00', '%Y-%m-%d %T'));
 
 INSERT INTO Auction VALUES (NULL, 3, 20000, NULL, NULL, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-05-15', '%Y-%m-%d'), NULL);
 INSERT INTO Post VALUES (NULL, 3, 'testuser5', 'new car deal located in Edison, NJ');
-INSERT INTO Bid VALUES (NULL, 3, 'testuser1', 20000, 'Manual',STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'));
-INSERT INTO Bid VALUES (NULL, 3, 'testuser3', 21001, 'Manual',STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 3, 'testuser1', 20000, STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'));
+INSERT INTO Bid VALUES (NULL, 3, 'testuser3', 21001, STR_TO_DATE('2022-05-06 20:00:00', '%Y-%m-%d %T'));
 
 INSERT INTO Auction VALUES (NULL, 2, 15000, NULL, NULL,STR_TO_DATE('2022-05-01 19:00:00', '%Y-%m-%d %T'), STR_TO_DATE('2022-06-15', '%Y-%m-%d'), NULL);
 INSERT INTO Post VALUES (NULL, 4, 'testuser4', 'selling a Blue refurbished car located in Jersey City, NJ');

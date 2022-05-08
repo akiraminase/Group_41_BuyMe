@@ -43,9 +43,9 @@ while(rs.next()) {
 insert = "INSERT INTO Auction(Auction_ID, Item_ID, Initial_Price, Minimum_Price, Closing_Time, Closing_price, Start_Time, Winner)"
 		+ "VALUES (NULL, ?, ?, ?, ?, Null, NOW(), NULL)";
 ps = con.prepareStatement(insert);
-ps.setInt(1, Item_ID) ;
-ps.setFloat(2, Initial_Price);
-ps.setFloat(3, Minimum_Price);
+ps.setInt(1, Integer.parseInt(Item_ID)) ;
+ps.setFloat(2, Float.valueOf(Initial_Price));
+ps.setFloat(3, Float.valueOf(Minimum_Price));
 ps.setString(4, Closing_Time) ;
 
 ps.executeUpdate();
@@ -60,7 +60,7 @@ while(rs.next()) {
 insert = "INSERT INTO Post(Post_ID, Auction_ID, username,  Description)" 
 		 + "VALUES (NULL, ?, ?, ?)";
 ps = con.prepareStatement(insert);
-ps.setInt(1, Auction_ID) ;
+ps.setInt(1, Integer.parseInt(Auction_ID)) ;
 ps.setString(2, username) ;
 ps.setString(3, description) ;
 ps.executeUpdate();

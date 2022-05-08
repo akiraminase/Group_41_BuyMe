@@ -21,15 +21,43 @@
 			String str = "SELECT * FROM end_user WHERE Username = '"+username+"';";
 			ResultSet result = stmt.executeQuery(str);
 
-			
-
-
+			PreparedStatement ps;
 			try{
 				result.next();
 				if(result.getString("Password").equals(password)){
                     request.getSession().setAttribute("username", username);
                     request.getSession().setAttribute("password", password);
-					//TODO: define all owners by insert if min price is null or reached and alert
+
+					//define all winners by insert if min price is null or reached and alert
+					str = "SELECT Auction.Auction_ID, Minimum_Price "
+                           + "FROM Auction "
+                           + "WHERE Closing_Time < NOW() AND "
+						   + "Auction.Winner IS NULL";
+					result = stmt.executeQuery(str);
+
+					while(result.next()){
+						String auctionID = result.getString("Auction_ID");
+						Float minPrice = Float.valueOf(result.getString("Minimum_Price"))
+						str = "SELECT Username, Price"
+                           + "FROM Bid "
+                           + "WHERE Auction_ID = "+auctionID
+						   + "ORDER BY Biding_Time DESC LIMIT 1";
+						ResultSet subResult = stmt.executeQuery(str);
+						if(subResult.next() && Float.valueOf(subResult.getString("Closing_Price"))>= minPrice){
+							//update auction status
+							String update = "UPDATE Auction SET Winner = ?, Closing_Price = ? WHERE username ='"+username+"';"
+							ps = con.prepareStatement(update);
+							ps.setString(1, subResult.getString("Username")) ;
+							ps.setFloat(2, Float.valueOf(subResult.getString("Closing_Price"))) ;
+							ps.executeUpdate();
+							//alert winner
+							String insert = "Insert INTO Alert VALUES (NULL, ?, ?, NOW())';"
+							ps = con.prepareStatement(update);
+							ps.setString(1, subResult.getString("Username")) ;
+							ps.setString(2, "You win Auction #"+auctionID) ;
+							ps.executeUpdate();
+						}
+					}
 					
                     out.println( "Welcome to BuyMe Car Auction Market!" );
 					//get unread alert numbers since last_read_time
