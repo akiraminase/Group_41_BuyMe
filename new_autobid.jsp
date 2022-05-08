@@ -74,6 +74,8 @@
 						ps.setString(2, "'There is a higher bid exceeding your upper limit for Auction #"+auctionID+"'") ;
 						ps.executeUpdate();
 					}
+					//TODO: place all autobid by insert
+					//TODO: Alert all autobid owners
 					
 				}
 			}

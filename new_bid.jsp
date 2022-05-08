@@ -44,6 +44,7 @@
 					out.println("Your price has to be higher than current price. Please re-bid.");
 				}else{
 					//correct input
+					//place bid
 					String insert = "INSERT INTO Bid VALUES (NULL, ?, ?, ?, 'Manual', NOW())";
 					PreparedStatement ps = con.prepareStatement(insert);
 					ps.setString(1, Auction_ID) ;
@@ -72,6 +73,8 @@
 						ps.setString(2, "'There is a higher bid exceeding your upper limit for Auction #"+auctionID+"'") ;
 						ps.executeUpdate();
 					}
+					//TODO: place all autobid by insert
+					//TODO: Alert all autobid owners
 					
 				}
 			}

@@ -65,8 +65,17 @@ ps.setString(2, username) ;
 ps.setString(3, description) ;
 ps.executeUpdate();
 
-//TODO: alert user of new item
-
+//alert other users of new item
+String SQLstr = "SELECT Username FROM Item_Alert_Manager WHERE Make = '"+make+"' AND Model = '"+model+"' AND Year ='"+yearofcar+"' AND Username != '"+username+"';";
+ResultSet result = stmt.executeQuery(SQLstr);
+while(result.next()){
+	otherUsername = result.getString("Username");
+	insert = "INSERT INTO Alert VALUES (NULL, ?, ?, NOW())";
+	ps = con.prepareStatement(insert);
+	ps.setString(1, otherUsername) ;
+	ps.setString(2, "There is a new item posted for your "+yearofcar+" "+make+" "+model+" at Auction #"+Auction_ID) ;
+	ps.executeUpdate();
+}
 
 con.close();
 out.println( " <a href='index.jsp' >return to main page </a> " );

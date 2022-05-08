@@ -55,7 +55,7 @@
 			out.println("<br><form method=\"post\" action=\"new_autobid.jsp\"><table>");
 			out.println("<tr><td>Upper Limit</td><td><input type=\"text\" name=\"upperLimit\" required></td></tr>");
 			out.println("<tr><td>Increment</td><td><input type=\"text\" name=\"increment\" required></td></tr>");
-			out.println("</table><input type=\"submit\" value=\"Bid\"></form><br>")
+			out.println("</table><input type=\"submit\" value=\"Set\"></form><br>")
 				
 			SQLstr = "SELECT * FROM bid WHERE Auction_ID ="+auctionID+" ORDER BY Biding_Time DESC;";
 			result = stmt.executeQuery(SQLstr);

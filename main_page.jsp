@@ -29,13 +29,11 @@
 				if(result.getString("Password").equals(password)){
                     request.getSession().setAttribute("username", username);
                     request.getSession().setAttribute("password", password);
-					//TODO: place all autobid by insert
-					//TODO: Alert all autobid owners
 					//TODO: define all owners by insert if min price is null or reached and alert
 					
                     out.println( "Welcome to BuyMe Car Auction Market!" );
 					//get unread alert numbers since last_read_time
-					String alertsql = "SELECT COUNT(*) AS Unread_Alert_N FROM Alert LEFT JOIN ON alert.username = buyer.username WHERE Sent_Time> last_read_time AND Username = '"+username+"';";
+					String alertsql = "SELECT COUNT(*) AS Unread_Alert_N FROM Alert LEFT JOIN Buyer ON alert.username = buyer.username WHERE Sent_Time> last_read_time AND alert.Username = '"+username+"';";
                     result = stmt.executeQuery(alertsql);
                     try{
 						result.next();

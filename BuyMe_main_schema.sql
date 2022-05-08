@@ -209,3 +209,5 @@ INSERT INTO question VALUES (NULL, 'testuser1', 'How do i buy?');
 INSERT INTO admin_staff VALUES ('admin', NULL, 'testpassword');
 INSERT INTO customer_representative VALUES ('rep1', NULL, 'testpassword','admin');
 INSERT INTO answer VALUES (NULL, 1, 'testuser1', 'rep1', 'please follow our instructions.');
+
+SELECT COUNT(*) AS Unread_Alert_N FROM Alert LEFT JOIN Buyer ON alert.username = buyer.username WHERE Sent_Time> last_read_time AND alert.Username = 'testuser3';
