@@ -1,4 +1,6 @@
 # Group_41_BuyMe
+PLEAST DON'T COPY OUR WORK FOR ANY PURPOSE! TEMPORARILY MADE PUBLIC FOR DISPLAY.
+
 Test Credentials:
   Username: testuser1, testuser2, testuser3, testuser4, testuser5
   Password: testpassword
