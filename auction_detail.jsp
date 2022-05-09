@@ -15,7 +15,6 @@
 			ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
-
             String username = (String) request.getSession().getAttribute("username");
 			String auctionID = request.getParameter("selected").split("#")[1];
 			request.getSession().setAttribute("auctionID", auctionID);
@@ -46,7 +45,7 @@
 			out.println("Start a new bid");
 			out.println("<br><form method=\"post\" action=\"new_bid.jsp\"><table>");
 			out.println("<tr><td>Price</td><td><input type=\"text\" name=\"price\" required></td></tr>");
-			out.println("</table><input type=\"submit\" value=\"Bid\"></form><br>")
+			out.println("</table><input type=\"submit\" value=\"Bid\"></form><br>");
 			
 			out.println("<br>");
 			out.println("<br>");
@@ -56,7 +55,7 @@
 			out.println("<br><form method=\"post\" action=\"new_autobid.jsp\"><table>");
 			out.println("<tr><td>Upper Limit</td><td><input type=\"text\" name=\"upperLimit\" required></td></tr>");
 			out.println("<tr><td>Increment</td><td><input type=\"text\" name=\"increment\" required></td></tr>");
-			out.println("</table><input type=\"submit\" value=\"Set\"></form><br>")
+			out.println("</table><input type=\"submit\" value=\"Set\"></form><br>");
 				
 			SQLstr = "SELECT * FROM bid WHERE Auction_ID ="+auctionID+" ORDER BY Biding_Time DESC;";
 			result = stmt.executeQuery(SQLstr);

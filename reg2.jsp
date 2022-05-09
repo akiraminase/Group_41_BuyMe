@@ -12,11 +12,13 @@ String lastname=request.getParameter("lastname") ;
  
  try {
 	 
-	 Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/buyme","root", "putpasswordhere");
-Statement stmt = con.createStatement();
+	Class.forName("com.mysql.jdbc.Driver");
+	Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/buyme","root", "putpasswordhere");
+	Statement stmt = con.createStatement();
 
-int insert=stmt.executeUpdate("insert into end_user( username, email, password)values('"+username+"','"+email+"','"+password+"')"); 
+	stmt.executeUpdate("insert into end_user( username, email, password)values('"+username+"','"+email+"','"+password+"')"); 
+	stmt.executeUpdate("insert into buyer( username, last_read_time)values('"+username+"', NULL)"); 
+	stmt.executeUpdate("insert into seller( username)values('"+username+"')"); 
  }
  catch (Exception e){
 		out.print(e); }

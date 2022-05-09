@@ -18,7 +18,7 @@
 			String reportType = request.getParameter("typeReport");
 			
 			if (reportType.equals("total-earnings")){
-				String str = "SELECT Closing_Price FROM Auction WHERE Closing_Price >= Minimum_Price AND DATE(Closing_Time) < DATE(NOW()); ";
+				String str = "SELECT Closing_Price FROM Auction WHERE Winner IS NOT NULL";
 				ResultSet result = stmt.executeQuery(str);
 				double count = 0;
 				try{

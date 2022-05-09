@@ -1,8 +1,8 @@
 package com.cs336.pkg;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+
+
 
 public class ApplicationDB {
 	
@@ -49,11 +49,7 @@ public class ApplicationDB {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
-	
+
 	public static void main(String[] args) {
 		ApplicationDB dao = new ApplicationDB();
 		Connection connection = dao.getConnection();

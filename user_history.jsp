@@ -25,9 +25,9 @@
                 String auctionID = result.getString("Auction_ID");
                 //session.setAttribute("auctionID", auctionID);
                 out.println(
-				"<tr><td>Make: "+ result.getString("Category_LEVEL1")+"</td></tr>"+
-                "<tr><td>Model: "+ result.getString("Category_LEVEL2")+"</td></tr>"+
-                "<tr><td>Year: "+ result.getString("Category_LEVEL3")+"</td></tr>"+
+				"<tr><td>Make: "+ result.getString("Make")+"</td></tr>"+
+                "<tr><td>Model: "+ result.getString("Model")+"</td></tr>"+
+                "<tr><td>Year: "+ result.getString("Year")+"</td></tr>"+
                 "<tr><td>Condition: "+ result.getString("Item_Condition")+"</td></tr>"+
 				"<tr><td>Close Time: "+ result.getString("Closing_Time")+" </td></tr>"+
                 "<tr><td>Bid Time: "+ result.getString("Biding_Time")+" </td></tr>"+

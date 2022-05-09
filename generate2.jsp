@@ -18,7 +18,7 @@
 			String reportType = request.getParameter("command");
 			
 			if (reportType.equals("end-user")){
-				String tempTableQuery = "select e.username, a.closing_price from Seller e, Post p, Auction a WHERE e.Username = p.Username AND p.Auction_ID = a.Auction_ID AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price";
+				String tempTableQuery = "select e.username, a.closing_price from Seller e, Post p, Auction a WHERE e.Username = p.Username AND p.Auction_ID = a.Auction_ID AND a.Winner IS NOT NULL ";
 				String str = "select temp.username, sum(temp.closing_price) as earnings from (" + tempTableQuery + ") as temp group by temp.username;";
 				ResultSet result = stmt.executeQuery(str);
 				out.println("Username ---> Earnings");
@@ -30,7 +30,7 @@
 				}
 			}
 			else if (reportType.equals("item")){
-				String tempTableQuery = "select i.make, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price";
+				String tempTableQuery = "select i.make, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND a.Winner IS NOT NULL ";
 				String str = "select temp.make as Item, sum(temp.closing_price) as Earnings from (" + tempTableQuery + ") as temp group by temp.make;";
 				ResultSet result = stmt.executeQuery(str);
 				out.println("Item  --->  Earnings");
@@ -43,7 +43,7 @@
 				
 			}
 			else if (reportType.equals("itemType")){
-				String tempTableQuery = "select i.model, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price";
+				String tempTableQuery = "select i.model, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND a.Winner IS NOT NULL ";
 				String str = "select temp.model as Item_Type, sum(temp.closing_price) as Earnings from (" + tempTableQuery + ") as temp group by temp.model;";
 				ResultSet result = stmt.executeQuery(str);
 				out.println("Item Type  --->  Earnings");
@@ -60,7 +60,7 @@
 				}
 			}
 			else if (reportType.equals("bestItems")){
-				String str = "select i.make, i.model, i.year, i.item_condition, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND DATE(a.closing_time) < DATE(NOW()) AND a.closing_price >= a.minimum_price order by a.closing_price DESC;";
+				String str = "select i.make, i.model, i.year, i.item_condition, a.closing_price from Item i, Auction a where i.item_id = a.item_id AND a.Winner IS NOT NULL order by a.closing_price DESC;";
 				ResultSet result = stmt.executeQuery(str);
 				out.println("Item  ---->  Price");
 				out.println("<br>");
@@ -71,7 +71,7 @@
 				}
 			}
 			else if (reportType.equals("bestBuyers")){
-				String str = "select b.username, sum(a.closing_price) as total_spent from Auction a, Bid b where a.auction_id = b.auction_id AND a.closing_price = b.price group by b.username order by sum(a.closing_price) DESC;";
+				String str = "SELECT winner as username, SUM(closing_price) As total_spent FROM Auction WHERE Winner IS NOT NULL GROUP BY winner;";
 				ResultSet result = stmt.executeQuery(str);
 				out.println("Buyer username  ---->  Total Spent");
 				out.println("<br>");

@@ -11,47 +11,43 @@
 	</head>
 	<body class="main">
 		<% try {
-
 			ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
-
 			String str = "SELECT * FROM end_user WHERE Username = '"+username+"';";
 			ResultSet result = stmt.executeQuery(str);
-
 			PreparedStatement ps;
 			try{
 				result.next();
 				if(result.getString("Password").equals(password)){
                     request.getSession().setAttribute("username", username);
                     request.getSession().setAttribute("password", password);
-
 					//define all winners by insert if min price is null or reached and alert
 					str = "SELECT Auction.Auction_ID, Minimum_Price "
                            + "FROM Auction "
                            + "WHERE Closing_Time < NOW() AND "
-						   + "Auction.Winner IS NULL";
+						   + "Auction.Winner IS NULL AND Auction_ID IN (SELECT DISTINCT Auction_ID FROM Bid)";
 					result = stmt.executeQuery(str);
-
 					while(result.next()){
 						String auctionID = result.getString("Auction_ID");
-						Float minPrice = Float.valueOf(result.getString("Minimum_Price"))
-						str = "SELECT Username, Price"
+						Float minPrice = Float.valueOf(result.getString("Minimum_Price"));
+						str = "SELECT Username, Price "
                            + "FROM Bid "
                            + "WHERE Auction_ID = "+auctionID
-						   + "ORDER BY Biding_Time DESC LIMIT 1";
+						   + " ORDER BY Biding_Time DESC LIMIT 1";
 						ResultSet subResult = stmt.executeQuery(str);
-						if(subResult.next() && Float.valueOf(subResult.getString("Closing_Price"))>= minPrice){
+						if(subResult.next() && Float.valueOf(subResult.getString("Price"))>= minPrice){
 							//update auction status
-							String update = "UPDATE Auction SET Winner = ?, Closing_Price = ? WHERE username ='"+username+"';"
+							String update = "UPDATE Auction SET Winner = ?, Closing_Price = ? WHERE auction_ID = ? ;";
 							ps = con.prepareStatement(update);
 							ps.setString(1, subResult.getString("Username")) ;
-							ps.setFloat(2, Float.valueOf(subResult.getString("Closing_Price"))) ;
+							ps.setFloat(2, Float.valueOf(subResult.getString("Price"))) ;
+							ps.setString(3, auctionID) ;
 							ps.executeUpdate();
 							//alert winner
-							String insert = "Insert INTO Alert VALUES (NULL, ?, ?, NOW())';"
+							String insert = "Insert INTO Alert VALUES (NULL, ?, ?, NOW())';";
 							ps = con.prepareStatement(update);
 							ps.setString(1, subResult.getString("Username")) ;
 							ps.setString(2, "You win Auction #"+auctionID) ;
@@ -61,7 +57,7 @@
 					
                     out.println( "Welcome to BuyMe Car Auction Market!" );
 					//get unread alert numbers since last_read_time
-					String alertsql = "SELECT COUNT(*) AS Unread_Alert_N FROM Alert LEFT JOIN Buyer ON alert.username = buyer.username WHERE Sent_Time> last_read_time AND alert.Username = '"+username+"';";
+					String alertsql = "SELECT COUNT(*) AS Unread_Alert_N FROM Alert LEFT JOIN Buyer ON alert.username = buyer.username WHERE (last_read_time IS NULL OR Sent_Time> last_read_time) AND alert.Username = '"+username+"';";
                     result = stmt.executeQuery(alertsql);
                     try{
 						result.next();
@@ -73,7 +69,6 @@
 				
 					
 					//test if user is a buyer
-
 					str = "SELECT * FROM buyer WHERE Username = '"+username+"';";
 					result = stmt.executeQuery(str);
 					try{
@@ -99,7 +94,6 @@
            					//String[] searchStrs = new String[3];
 							//request.setAttribute("searchStrs", searchStrs);
 						}
-
                         String SQLstr = "SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, MAX(Price) AS Current_Price "
                            + "FROM Auction, Item, Bid "
                            + "WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND "
@@ -109,7 +103,6 @@
 						   + "UNION SELECT Auction.Auction_ID, Make, Model, Year, Item_Condition, Closing_Time, Initial_Price, Initial_Price AS Current_Price "
 						   + "FROM Auction, Item WHERE Start_Time<=NOW() AND Closing_Time >= NOW() AND "
 						   + "Auction.Item_ID = Item.Item_ID AND Auction_ID NOT IN (SELECT DISTINCT Auction_ID FROM Bid);";
-
                         result = stmt.executeQuery(SQLstr);
                         //HttpSession session = request.getSession(); 
                         out.println("<form method=\"post\" action=\"auction_detail.jsp\"><table><Caption>Current Auctions</Caption>");
@@ -128,8 +121,6 @@
 							out.println("<br><br><br>");
 						}
 						out.println("</table></form>");
-
-
 					}catch (Exception e){;}
 					
 					out.println("<br>");
@@ -158,7 +149,6 @@
 					}catch (Exception e){
 						;//do nothing
 					}
-
 				}else{
 					out.print("Wrong Password");
 				}

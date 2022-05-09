@@ -15,15 +15,13 @@
 			ApplicationDB db = new ApplicationDB();	
 			Connection con = db.getConnection();
 			Statement stmt = con.createStatement();
-
             String username = (String) request.getSession().getAttribute("username");
-			String model = request.getParameter("model")
+			String model = request.getParameter("model");
 			String make = request.getParameter("make");
 			String year = request.getParameter("year");
-
 			
             
-			String SQLstr = "SELECT COUNT(*) AS count FROM Item_Alert_Manager WHERE Username = '"+username+"' AND Make = '"make+"' AND Model = '"+model+"' AND Year = '"+year+"';";
+			String SQLstr = "SELECT COUNT(*) AS count FROM Item_Alert_Manager WHERE Username = '"+username+"' AND Make = '"+make+"' AND Model = '"+model+"' AND Year = '"+year+"';";
 			ResultSet result = stmt.executeQuery(SQLstr);
 			result.next();
 			if(result.getInt("count") > 0){
